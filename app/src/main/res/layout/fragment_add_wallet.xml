@@ -4,9 +4,63 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/round_top_corner">
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text=""/>
+
+    <ImageView
+        android:id="@+id/img_three_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_three_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_5sdp"
+        />
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/img_three_view"
+        android:text="@string/add_wallet"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/_15sdp"
+        android:textColor="@color/gray"
+        android:textStyle="bold"
+        />
+    <EditText
+        android:id="@+id/et_wallet_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_35sdp"
+        android:hint="@string/wallet_name_hint"
+        android:layout_below="@id/tv_title"
+        android:layout_margin="@dimen/_10sdp"
+        android:background="@drawable/edittext_border"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray"
+        android:textSize="@dimen/_15sdp"
+        />
+    <EditText
+        android:id="@+id/et_wallet_amount"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_35sdp"
+        android:hint="@string/wallet_amount_hint"
+        android:layout_below="@id/et_wallet_name"
+        android:layout_margin="@dimen/_10sdp"
+        android:background="@drawable/edittext_border"
+        android:inputType="numberDecimal"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray"
+        android:textSize="@dimen/_15sdp"
+        />
+
+    <Button
+        android:id="@+id/btn_add_wallet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_wallet"
+        android:background="@drawable/rounded_button_background"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/et_wallet_amount"
+        android:textAllCaps="false"
+        android:layout_marginBottom="@dimen/_120sdp"
+        />
     </RelativeLayout>
 

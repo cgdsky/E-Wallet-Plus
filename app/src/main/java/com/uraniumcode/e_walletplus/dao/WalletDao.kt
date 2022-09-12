@@ -9,7 +9,7 @@ import com.uraniumcode.e_walletplus.model.Wallet
 interface WalletDao {
 
     @Insert
-    suspend fun insertData(vararg wallet: Wallet) : List<Long>
+    suspend fun insertData(wallet: Wallet) : Long
 
     @Query("Select * From Wallet")
     suspend fun getAllWallets() : List<Wallet>

@@ -6,6 +6,8 @@
     <string name="add_balance">Bakiye Yükle </string>
     <string name="add_expence">Harcama Gir </string>
     <string name="add_wallet">Cüzdan Ekle </string>
+    <string name="wallet_name_hint">Cüzdan Adı </string>
+    <string name="wallet_amount_hint">Bakiye Miktarı </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
