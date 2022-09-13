@@ -62,7 +62,7 @@
     >
 
     <Button
-        android:id="@+id/wallet_add_money"
+        android:id="@+id/btn_wallet_add_money"
         android:layout_width="0dp"
         android:layout_height="@dimen/_30sdp"
         android:layout_marginLeft="@dimen/_15sdp"
@@ -78,7 +78,7 @@
         android:textAllCaps="false"
         android:textSize="@dimen/_11sdp" />
     <Button
-        android:id="@+id/wallet_add_expense"
+        android:id="@+id/btn_wallet_add_spend"
         android:layout_width="0dp"
         android:layout_height="@dimen/_30sdp"
         android:layout_weight="1"

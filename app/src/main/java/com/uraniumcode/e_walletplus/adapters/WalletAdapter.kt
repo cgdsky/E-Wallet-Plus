@@ -4,9 +4,12 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.uraniumcode.e_walletplus.R
+import com.uraniumcode.e_walletplus.fragments.HomeFragmentDirections
 import com.uraniumcode.e_walletplus.model.Wallet
+import kotlinx.android.synthetic.main.fragment_add_spend.view.*
 import kotlinx.android.synthetic.main.item_wallet.view.*
 
 class WalletAdapter(val walletList: ArrayList<Wallet>): RecyclerView.Adapter<WalletAdapter.WalletViewHolder>() {
@@ -24,6 +27,11 @@ class WalletAdapter(val walletList: ArrayList<Wallet>): RecyclerView.Adapter<Wal
     override fun onBindViewHolder(holder: WalletViewHolder, position: Int) {
         holder.view.tv_wallet_name.text = walletList[position].name
         holder.view.tv_wallet_amount.text = walletList[position].amount.toString()
+
+        holder.view.btn_wallet_add_spend.setOnClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToAddSpendFragment(walletList[position].id)
+            Navigation.findNavController(it).navigate(action)
+        }
     }
 
     override fun getItemCount(): Int {

@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_addWalletFragment"
             app:destination="@id/addWalletFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_addSpendFragment"
+            app:destination="@id/addSpendFragment" />
     </fragment>
     <dialog
         android:id="@+id/addWalletFragment"
@@ -22,5 +25,17 @@
         <action
             android:id="@+id/action_addWalletFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+    </dialog>
+    <dialog
+        android:id="@+id/addSpendFragment"
+        android:name="com.uraniumcode.e_walletplus.fragments.AddSpendFragment"
+        android:label="AddSpendFragment" >
+        <action
+            android:id="@+id/action_addSpendFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <argument
+            android:name="walletId"
+            app:argType="long"
+            android:defaultValue="0L" />
     </dialog>
 </navigation>

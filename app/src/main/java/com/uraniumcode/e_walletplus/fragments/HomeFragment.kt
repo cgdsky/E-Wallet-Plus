@@ -55,14 +55,14 @@ class HomeFragment : Fragment() {
             Navigation.findNavController(it).navigate(action)
         }
 
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Long>("key")?.observe(viewLifecycleOwner) { result ->
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Long>("insertWallet")?.observe(viewLifecycleOwner) { result ->
             if(result != 0L){
             getWallets()
              }
         }
     }
     private fun observeLiveData() {
-        viewModel.walletLiveData.observe(viewLifecycleOwner, { wallets ->
+        viewModel.walletsLiveData.observe(viewLifecycleOwner, { wallets ->
 
             wallets?.let {
                 walletAdapter.updateWalletList(wallets)

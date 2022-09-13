@@ -8,6 +8,9 @@
     <string name="add_wallet">Cüzdan Ekle </string>
     <string name="wallet_name_hint">Cüzdan Adı </string>
     <string name="wallet_amount_hint">Bakiye Miktarı </string>
+    <string name="spend_title">Harcama Tanımı </string>
+    <string name="spend_amount">Harcama Miktarı </string>
+    <string name="save">Kaydet </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
