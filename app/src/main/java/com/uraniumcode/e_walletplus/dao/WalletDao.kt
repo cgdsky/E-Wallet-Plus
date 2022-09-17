@@ -18,4 +18,7 @@ interface WalletDao {
     @Query("Update  Wallet set amount= :amount where id= :walletId")
     suspend fun updateWalletAmount(amount: Double,walletId: Long)
 
+    @Query("Select * From  Wallet where id= :walletId")
+    suspend fun getWallet(walletId: Long) : Wallet
+
 }

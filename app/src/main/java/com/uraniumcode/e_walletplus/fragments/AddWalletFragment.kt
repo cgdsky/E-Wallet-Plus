@@ -8,6 +8,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.uraniumcode.e_walletplus.R
 import com.uraniumcode.e_walletplus.model.Wallet
+import com.uraniumcode.e_walletplus.utils.Constants
 import com.uraniumcode.e_walletplus.viewmodels.AddWalletViewModel
 import kotlinx.android.synthetic.main.fragment_add_wallet.*
 
@@ -20,7 +21,7 @@ class AddWalletFragment() : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.BottomSheetTransparentTheme)
-        getActivity()?.getWindow()?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
     }
 
@@ -51,11 +52,10 @@ class AddWalletFragment() : BottomSheetDialogFragment() {
     }
 
     fun observeLiveData(){
-        viewModel.insertedWalletId.observe(viewLifecycleOwner, Observer { insertWalletId->
+        viewModel.insertedWalletId.observe(viewLifecycleOwner, { insertWalletId->
             insertWalletId?.let {
-                findNavController().previousBackStackEntry?.savedStateHandle?.set("insertWallet", insertWalletId)
+                findNavController().previousBackStackEntry?.savedStateHandle?.set(Constants().ADDED_WALLET, insertWalletId)
                 dismiss()
-
             }
         })
     }

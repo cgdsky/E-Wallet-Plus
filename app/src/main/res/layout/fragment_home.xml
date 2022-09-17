@@ -19,8 +19,28 @@
         android:layout_marginRight="@dimen/_10sdp"
         />
 
+<TextView
+    android:id="@+id/tv_title_last_spends"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/recycler_Wallet"
+    android:text="@string/last_spends_title"
+    android:textColor="@color/gray"
+    android:textSize="@dimen/_12sdp"
+    android:layout_marginTop="@dimen/_10sdp"
+    android:layout_marginStart="@dimen/_10sdp"
+    />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_last_spends"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_130sdp"
+        android:layout_below="@id/tv_title_last_spends"
+        android:layout_margin="@dimen/_10sdp"
+        android:layout_above="@id/btn_wallet"
+        />
+
     <Button
-        android:id="@+id/btnWallets"
+        android:id="@+id/btn_wallet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add_wallet"

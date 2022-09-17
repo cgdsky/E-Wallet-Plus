@@ -11,12 +11,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.uraniumcode.e_cuzdanplus.viewModels.HomeViewModel
 import com.uraniumcode.e_walletplus.R
+import com.uraniumcode.e_walletplus.adapters.SpendAdapter
 import com.uraniumcode.e_walletplus.adapters.WalletAdapter
+import com.uraniumcode.e_walletplus.utils.Constants
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
     private lateinit var viewModel : HomeViewModel
     private val walletAdapter = WalletAdapter(arrayListOf())
+    private val  spendAdapter = SpendAdapter(arrayListOf(), arrayListOf())
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,32 +38,46 @@ class HomeFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         initListeners()
         initViews()
-        getWallets()
-
-
+        getAllData()
+        observeLiveData()
 
     }
+
     private fun initViews(){
         recycler_Wallet.layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.HORIZONTAL,
             false
         )
+        recycler_last_spends.layoutManager = LinearLayoutManager(
+            context,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
 
         recycler_Wallet.adapter = walletAdapter
+        recycler_last_spends.adapter = spendAdapter
     }
+
     private fun initListeners(){
-        btnWallets.setOnClickListener {
+        btn_wallet.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToAddWalletFragment()
             Navigation.findNavController(it).navigate(action)
         }
 
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Long>("insertWallet")?.observe(viewLifecycleOwner) { result ->
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Long>(Constants().ADDED_WALLET)?.observe(viewLifecycleOwner) { result ->
             if(result != 0L){
-            getWallets()
+                viewModel.getAllWallets()
              }
         }
+
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Long>(Constants().ADDED_SPEND)?.observe(viewLifecycleOwner) { result ->
+            if(result != 0L){
+                getAllData()
+            }
+        }
     }
+
     private fun observeLiveData() {
         viewModel.walletsLiveData.observe(viewLifecycleOwner, { wallets ->
 
@@ -70,14 +87,23 @@ class HomeFragment : Fragment() {
 
         })
 
+        viewModel.spendsLiveData.observe(viewLifecycleOwner, { spends ->
+
+            spends?.let {
+                viewModel.spendsWalletLiveData.observe(viewLifecycleOwner, { wallets ->
+
+                    wallets?.let {
+                        spendAdapter.updateSpendList(spends,wallets)
+                    }
+                })
+            }
+        })
+
     }
 
-    fun getWallets(){
+    private fun getAllData(){
         viewModel.getAllWallets()
-        observeLiveData()
+        viewModel.getLastSpends()
     }
-
-
-
 
 }

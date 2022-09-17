@@ -12,8 +12,14 @@ class AddSpendViewModel(application: Application) : BaseViewModel(application) {
 
     fun addSpend(data : Spend) {
         launch {
-            val dao = AppDatabase(getApplication()).spendDao()
-            insertedSpendId.value = dao.insertData(data)
+            val walletDao = AppDatabase(getApplication()).walletDao()
+            val spendDao = AppDatabase(getApplication()).spendDao()
+
+            val wallet = walletDao.getWallet(data.walletId)
+            val walletAmount = wallet.amount!! + data.amount
+
+            walletDao.updateWalletAmount(walletAmount,data.walletId)
+            insertedSpendId.value = spendDao.insertData(data)
         }
 
     }

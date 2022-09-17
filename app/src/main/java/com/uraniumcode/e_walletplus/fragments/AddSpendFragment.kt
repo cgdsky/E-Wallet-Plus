@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.uraniumcode.e_walletplus.R
 import com.uraniumcode.e_walletplus.model.Spend
+import com.uraniumcode.e_walletplus.utils.Constants
 import com.uraniumcode.e_walletplus.viewmodels.AddSpendViewModel
 import kotlinx.android.synthetic.main.fragment_add_spend.*
 
@@ -22,7 +24,7 @@ class AddSpendFragment : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.BottomSheetTransparentTheme)
-        getActivity()?.getWindow()?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
     }
 
@@ -43,22 +45,25 @@ class AddSpendFragment : BottomSheetDialogFragment() {
         observeLiveData()
     }
 
-    fun listeners(){
+    private fun listeners(){
         btn_add_spend.setOnClickListener {
             val spendTitle = et_spend_title.text.toString()
-            val spendAmount = et_spend_amount.text.toString().toDouble()
+            val spendAmount = et_spend_amount.text.toString().toDouble() * -1
             val dataTime = System.currentTimeMillis()
             val spendData = Spend(spendTitle, dataTime, spendAmount, walletId)
 
             viewModel.addSpend(spendData)
-
-
         }
     }
 
 
-    fun observeLiveData(){
-
+    private fun observeLiveData(){
+        viewModel.insertedSpendId.observe(viewLifecycleOwner, { id ->
+            id?.let {
+                findNavController().previousBackStackEntry?.savedStateHandle?.set(Constants().ADDED_SPEND, id)
+                dismiss()
+            }
+        })
     }
 
 

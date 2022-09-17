@@ -8,16 +8,16 @@ import androidx.room.PrimaryKey
 data class Spend(
 
     @ColumnInfo(name = "title")
-    val title: String?,
+    val title: String,
 
     @ColumnInfo(name = "dateTime ")
-    val dateTime: Long?,
+    val dateTime: Long,
 
     @ColumnInfo(name = "amount")
-    val amount: Double?,
+    val amount: Double,
 
     @ColumnInfo(name = "walletId")
-    val walletId: Long?
+    val walletId: Long
 ){
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
