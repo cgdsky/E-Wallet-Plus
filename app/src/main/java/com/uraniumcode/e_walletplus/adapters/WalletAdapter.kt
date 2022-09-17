@@ -29,7 +29,11 @@ class WalletAdapter(val walletList: ArrayList<Wallet>): RecyclerView.Adapter<Wal
         holder.view.tv_wallet_amount.text = walletList[position].amount.toString()
 
         holder.view.btn_wallet_add_spend.setOnClickListener {
-            val action = HomeFragmentDirections.actionHomeFragmentToAddSpendFragment(walletList[position].id)
+            val action = HomeFragmentDirections.actionHomeFragmentToAddSpendFragment(walletList[position].id,true)
+            Navigation.findNavController(it).navigate(action)
+        }
+        holder.view.btn_wallet_add_money.setOnClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToAddSpendFragment(walletList[position].id,false)
             Navigation.findNavController(it).navigate(action)
         }
     }

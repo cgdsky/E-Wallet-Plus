@@ -37,5 +37,9 @@
             android:name="walletId"
             app:argType="long"
             android:defaultValue="0L" />
+        <argument
+            android:name="isSpend"
+            app:argType="boolean"
+            android:defaultValue="true" />
     </dialog>
 </navigation>

@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_add_spend.*
 class AddSpendFragment : BottomSheetDialogFragment() {
     private lateinit var viewModel : AddSpendViewModel
     private var walletId = 0L
+    private var isSpend = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,15 +41,23 @@ class AddSpendFragment : BottomSheetDialogFragment() {
         viewModel = ViewModelProvider(this).get(AddSpendViewModel::class.java)
         arguments?.let {
             walletId = AddSpendFragmentArgs.fromBundle(it).walletId
+            isSpend = AddSpendFragmentArgs.fromBundle(it).isSpend
         }
+        changeTitle()
         listeners()
         observeLiveData()
     }
 
+
+    private fun changeTitle(){
+        if(!isSpend){
+            tv_title.setText(R.string.add_balance)
+        }
+    }
     private fun listeners(){
         btn_add_spend.setOnClickListener {
             val spendTitle = et_spend_title.text.toString()
-            val spendAmount = et_spend_amount.text.toString().toDouble() * -1
+            val spendAmount = if(isSpend) et_spend_amount.text.toString().toDouble() * -1 else et_spend_amount.text.toString().toDouble()
             val dataTime = System.currentTimeMillis()
             val spendData = Spend(spendTitle, dataTime, spendAmount, walletId)
 

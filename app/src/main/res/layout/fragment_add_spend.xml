@@ -21,6 +21,7 @@
         android:layout_centerHorizontal="true"
         android:textSize="@dimen/_15sdp"
         android:textColor="@color/gray"
+        android:text="@string/add_expence"
         android:textStyle="bold"
         />
     <EditText
