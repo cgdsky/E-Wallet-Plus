@@ -10,6 +10,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.uraniumcode.e_cuzdanplus.viewModels.HomeViewModel
+import com.uraniumcode.e_walletplus.MainActivity
 import com.uraniumcode.e_walletplus.R
 import com.uraniumcode.e_walletplus.adapters.SpendAdapter
 import com.uraniumcode.e_walletplus.adapters.WalletAdapter
@@ -37,13 +38,14 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         initListeners()
-        initViews()
+        (activity as MainActivity).changeToolbarTitle(getString(R.string.app_name))
+        (activity as MainActivity).openCloseButtons(false)
+        setAdapters()
         getAllData()
         observeLiveData()
-
     }
 
-    private fun initViews(){
+    private fun setAdapters(){
         recycler_Wallet.layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.HORIZONTAL,
@@ -60,11 +62,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun initListeners(){
-        btn_wallet.setOnClickListener {
-            val action = HomeFragmentDirections.actionHomeFragmentToAddWalletFragment()
-            Navigation.findNavController(it).navigate(action)
-        }
-
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Long>(Constants().ADDED_WALLET)?.observe(viewLifecycleOwner) { result ->
             if(result != 0L){
                 viewModel.getAllWallets()

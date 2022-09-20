@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.uraniumcode.e_walletplus.R
 import com.uraniumcode.e_walletplus.fragments.HomeFragmentDirections
 import com.uraniumcode.e_walletplus.model.Wallet
-import kotlinx.android.synthetic.main.fragment_add_spend.view.*
 import kotlinx.android.synthetic.main.item_wallet.view.*
 
 class WalletAdapter(val walletList: ArrayList<Wallet>): RecyclerView.Adapter<WalletAdapter.WalletViewHolder>() {
@@ -34,6 +33,10 @@ class WalletAdapter(val walletList: ArrayList<Wallet>): RecyclerView.Adapter<Wal
         }
         holder.view.btn_wallet_add_money.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToAddSpendFragment(walletList[position].id,false)
+            Navigation.findNavController(it).navigate(action)
+        }
+        holder.view.setOnClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToWalletFragment(walletList[position])
             Navigation.findNavController(it).navigate(action)
         }
     }

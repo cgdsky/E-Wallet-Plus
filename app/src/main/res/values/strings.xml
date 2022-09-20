@@ -12,6 +12,7 @@
     <string name="spend_amount">Miktar </string>
     <string name="save">Kaydet </string>
     <string name="last_spends_title">Son İşlemler </string>
+    <string name="operations">İşlemler </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

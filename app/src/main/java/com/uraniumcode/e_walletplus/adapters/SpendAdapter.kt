@@ -35,13 +35,11 @@ class SpendAdapter(private val spendList: ArrayList<Spend>, private val walletLi
         }
         holder.view.tv_title_spend.text = spendList[position].title
         holder.view.tv_money.text = spendList[position].amount.toString()
-        holder.view.tv_wallet_name.text =walletList[position].name
+        if(walletList.size > 0){
+            holder.view.tv_wallet_name.text = walletList.get(position).name
+        }
         holder.view.tv_date.text = spendList[position].dateTime.dateTime()
-
-
-
     }
-
 
     override fun getItemCount(): Int {
         return spendList.size
@@ -50,9 +48,9 @@ class SpendAdapter(private val spendList: ArrayList<Spend>, private val walletLi
     @SuppressLint("NotifyDataSetChanged")
     fun updateSpendList(newSpendList: List<Spend>, newWalletList: List<Wallet>) {
         spendList.clear()
-        walletList.clear()
+        walletList?.clear()
         spendList.addAll(newSpendList)
-        walletList.addAll(newWalletList)
+        walletList?.addAll(newWalletList)
         notifyDataSetChanged()
     }
 }
