@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.uraniumcode.e_walletplus.R
+import com.uraniumcode.e_walletplus.listeners.DatabaseListener
 import com.uraniumcode.e_walletplus.model.Spend
 import com.uraniumcode.e_walletplus.model.Wallet
 import com.uraniumcode.e_walletplus.utils.*
 import kotlinx.android.synthetic.main.item_spend.view.*
 
-class SpendAdapter(private val spendList: ArrayList<Spend>, private val walletList: ArrayList<Wallet>): RecyclerView.Adapter<SpendAdapter.SpendViewHolder>()  {
+class SpendAdapter(private val databaseListener: DatabaseListener?, private val spendList: ArrayList<Spend>, private val walletList: ArrayList<Wallet>): RecyclerView.Adapter<SpendAdapter.SpendViewHolder>()  {
 
     class SpendViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
 
@@ -39,6 +40,9 @@ class SpendAdapter(private val spendList: ArrayList<Spend>, private val walletLi
             holder.view.tv_wallet_name.text = walletList.get(position).name
         }
         holder.view.tv_date.text = spendList[position].dateTime.dateTime()
+        holder.view.btn_delete.setOnClickListener {
+            AlertDialogHelper().showDeleteDialog(holder.view.context,databaseListener!!,spendList[position].id,true)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -48,9 +52,9 @@ class SpendAdapter(private val spendList: ArrayList<Spend>, private val walletLi
     @SuppressLint("NotifyDataSetChanged")
     fun updateSpendList(newSpendList: List<Spend>, newWalletList: List<Wallet>) {
         spendList.clear()
-        walletList?.clear()
+        walletList.clear()
         spendList.addAll(newSpendList)
-        walletList?.addAll(newWalletList)
+        walletList.addAll(newWalletList)
         notifyDataSetChanged()
     }
 }

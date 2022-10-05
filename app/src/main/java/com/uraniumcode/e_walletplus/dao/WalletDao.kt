@@ -21,4 +21,6 @@ interface WalletDao {
     @Query("Select * From  Wallet where id= :walletId")
     suspend fun getWallet(walletId: Long) : Wallet
 
+    @Query("Delete  From  Wallet where id= :walletId")
+    suspend fun deleteWallet(walletId: Long) : Int
 }

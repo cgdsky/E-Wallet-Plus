@@ -6,25 +6,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import com.uraniumcode.e_cuzdanplus.viewModels.HomeViewModel
 import com.uraniumcode.e_walletplus.MainActivity
 import com.uraniumcode.e_walletplus.R
 import com.uraniumcode.e_walletplus.adapters.SpendAdapter
 import com.uraniumcode.e_walletplus.adapters.WalletAdapter
+import com.uraniumcode.e_walletplus.listeners.DatabaseListener
 import com.uraniumcode.e_walletplus.utils.Constants
 import kotlinx.android.synthetic.main.fragment_home.*
 
-class HomeFragment : Fragment() {
-    private lateinit var viewModel : HomeViewModel
-    private val walletAdapter = WalletAdapter(arrayListOf())
-    private val  spendAdapter = SpendAdapter(arrayListOf(), arrayListOf())
+class HomeFragment : Fragment(), DatabaseListener {
+    private lateinit var viewModel: HomeViewModel
+    private var databaseListener: DatabaseListener? = null
+    private lateinit var walletAdapter: WalletAdapter
+    private lateinit var spendAdapter: SpendAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        databaseListener = this
+        spendAdapter = SpendAdapter(databaseListener, arrayListOf(), arrayListOf())
+        walletAdapter = WalletAdapter(databaseListener, arrayListOf())
     }
 
     override fun onCreateView(
@@ -59,6 +64,8 @@ class HomeFragment : Fragment() {
 
         recycler_Wallet.adapter = walletAdapter
         recycler_last_spends.adapter = spendAdapter
+        val snapHelper = PagerSnapHelper()
+        snapHelper.attachToRecyclerView(recycler_Wallet)
     }
 
     private fun initListeners(){
@@ -96,6 +103,24 @@ class HomeFragment : Fragment() {
             }
         })
 
+        viewModel.spendDeleteLiveData.observe(viewLifecycleOwner, { data ->
+
+            data?.let {
+                if(data == 1){
+                    viewModel.getLastSpends()
+                }
+            }
+        })
+
+        viewModel.walletDeleteLiveData.observe(viewLifecycleOwner, { data ->
+
+            data?.let {
+                if(data == 1){
+                    viewModel.getAllWallets()
+                }
+            }
+        })
+
     }
 
     private fun getAllData(){
@@ -103,4 +128,11 @@ class HomeFragment : Fragment() {
         viewModel.getLastSpends()
     }
 
+    override fun deleteSpend(spendId: Long) {
+        viewModel.deleteSpend(spendId)
+    }
+
+    override fun deleteWallet(walletId: Long) {
+        viewModel.deleteWallet(walletId)
+    }
 }

@@ -21,7 +21,13 @@
         android:background="@drawable/round_all_corner"
         android:backgroundTint="@color/white"
         android:elevation="@dimen/_7sdp">
-
+    <ImageButton
+        android:id="@+id/btn_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_delete"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/_10sdp"/>
         <TextView
             android:id="@+id/item_title"
             android:layout_width="wrap_content"
@@ -41,15 +47,7 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             tools:text="160.00 ₺"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/tv_wallet_amount"
-            >
 
-
-        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

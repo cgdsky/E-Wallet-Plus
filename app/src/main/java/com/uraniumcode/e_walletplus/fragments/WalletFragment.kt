@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.uraniumcode.e_walletplus.MainActivity
 import com.uraniumcode.e_walletplus.R
 import com.uraniumcode.e_walletplus.adapters.SpendAdapter
+import com.uraniumcode.e_walletplus.listeners.DatabaseListener
 import com.uraniumcode.e_walletplus.model.Wallet
+import com.uraniumcode.e_walletplus.utils.AlertDialogHelper
 import com.uraniumcode.e_walletplus.utils.Constants
 import com.uraniumcode.e_walletplus.viewmodels.WalletViewModel
 import kotlinx.android.synthetic.main.fragment_wallet.*
@@ -23,15 +25,22 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class WalletFragment : Fragment() {
+class WalletFragment : Fragment(), DatabaseListener {
 
     private lateinit var viewModel : WalletViewModel
     private lateinit var wallet : Wallet
-    private val  spendAdapter = SpendAdapter(arrayListOf(), arrayListOf())
+    private lateinit var  spendAdapter: SpendAdapter
     private val monthNames: Array<String> =  DateFormatSymbols(Locale.getDefault()).months
     private val years: ArrayList<Int> = arrayListOf()
+    private var databaseListener: DatabaseListener? = null
     private var selectedMonth = 0
     private var selectedYear = 0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        databaseListener = this
+        spendAdapter = SpendAdapter(databaseListener!!,arrayListOf(), arrayListOf())
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -119,6 +128,10 @@ class WalletFragment : Fragment() {
             Navigation.findNavController(it).navigate(action)
         }
 
+        btn_delete.setOnClickListener {
+            AlertDialogHelper().showDeleteDialog(context!!, databaseListener!!, wallet.id, false)
+        }
+
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Long>(
             Constants().ADDED_SPEND)?.observe(viewLifecycleOwner) { result ->
             if(result != 0L){
@@ -156,5 +169,28 @@ class WalletFragment : Fragment() {
                 initViews()
             }
         })
+
+        viewModel.walletDeleteLiveData.observe(viewLifecycleOwner, { data ->
+            data?.let {
+                if(data == 1){
+                    requireActivity().onBackPressed()
+                }
+            }
+        })
+        viewModel.spendDeleteLiveData.observe(viewLifecycleOwner, { data ->
+            data?.let {
+                if(data == 1){
+                    viewModel.getAllSpends(wallet.id,selectedMonth,selectedYear)
+                }
+            }
+        })
+    }
+
+    override fun deleteWallet(walletId: Long) {
+        viewModel.deleteWallet(wallet.id)
+    }
+
+    override fun deleteSpend(spendId: Long) {
+        viewModel.deleteSpend(spendId)
     }
 }

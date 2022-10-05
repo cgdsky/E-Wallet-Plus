@@ -13,6 +13,9 @@
     <string name="save">Kaydet </string>
     <string name="last_spends_title">Son İşlemler </string>
     <string name="operations">İşlemler </string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="wallet_delete_dialog_title">Cüzdan Silinsin mi? </string>
+    <string name="spend_delete_dialog_title">Harcama Silinsin mi? </string>
+    <string name="yes">Evet </string>
+    <string name="no">Hayır </string>
+
 </resources>

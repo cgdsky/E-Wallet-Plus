@@ -13,6 +13,8 @@ class WalletViewModel(application: Application) : BaseViewModel(application)  {
 
     var walletLiveData = MutableLiveData<Wallet>()
     var spendsLiveData = MutableLiveData<List<Spend>>()
+    var walletDeleteLiveData = MutableLiveData<Int>()
+    var spendDeleteLiveData = MutableLiveData<Int>()
 
     fun getAllSpends(walletId: Long, month: Int, year: Int) {
         launch {
@@ -31,6 +33,23 @@ class WalletViewModel(application: Application) : BaseViewModel(application)  {
             val dao = AppDatabase(getApplication()).walletDao()
             val wallets = dao.getWallet(walletId)
             walletLiveData.value = wallets
+        }
+    }
+
+    fun deleteWallet(walletId: Long){
+        launch {
+            val walletDao = AppDatabase(getApplication()).walletDao()
+            val spendDao = AppDatabase(getApplication()).spendDao()
+            spendDao.deleteWalletSpends(walletId)
+            walletDeleteLiveData.value = walletDao.deleteWallet(walletId)
+
+        }
+    }
+
+    fun deleteSpend(spendId: Long){
+        launch {
+            val spendDao = AppDatabase(getApplication()).spendDao()
+            spendDeleteLiveData.value = spendDao.deleteSpend(spendId)
         }
     }
 
