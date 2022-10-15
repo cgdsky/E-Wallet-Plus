@@ -15,14 +15,15 @@ class WalletViewModel(application: Application) : BaseViewModel(application)  {
     var spendsLiveData = MutableLiveData<List<Spend>>()
     var walletDeleteLiveData = MutableLiveData<Int>()
     var spendDeleteLiveData = MutableLiveData<Int>()
+    val walletDao = AppDatabase(getApplication()).walletDao()
+    val spendDao = AppDatabase(getApplication()).spendDao()
 
     fun getAllSpends(walletId: Long, month: Int, year: Int) {
         launch {
             val startDate= "01-$month-$year".timeStamp()
             val endDate= "31-$month-$year".timeStamp()
 
-            val dao = AppDatabase(getApplication()).spendDao()
-            val spends = dao.getSpendsBetweenTime(walletId,startDate,endDate)
+            val spends = spendDao.getSpendsBetweenTime(walletId,startDate,endDate)
 
             spendsLiveData.value = spends
         }
@@ -30,16 +31,14 @@ class WalletViewModel(application: Application) : BaseViewModel(application)  {
 
     fun getWallet(walletId: Long) {
         launch {
-            val dao = AppDatabase(getApplication()).walletDao()
-            val wallets = dao.getWallet(walletId)
+            val wallets = walletDao.getWallet(walletId)
             walletLiveData.value = wallets
         }
     }
 
     fun deleteWallet(walletId: Long){
         launch {
-            val walletDao = AppDatabase(getApplication()).walletDao()
-            val spendDao = AppDatabase(getApplication()).spendDao()
+
             spendDao.deleteWalletSpends(walletId)
             walletDeleteLiveData.value = walletDao.deleteWallet(walletId)
 
@@ -48,8 +47,12 @@ class WalletViewModel(application: Application) : BaseViewModel(application)  {
 
     fun deleteSpend(spendId: Long){
         launch {
-            val spendDao = AppDatabase(getApplication()).spendDao()
+            val spend = spendDao.getSpend(spendId)
+            val wallet = walletDao.getWallet(spend.walletId)
             spendDeleteLiveData.value = spendDao.deleteSpend(spendId)
+            val totalWalletAmount = wallet.amount!! - spend.amount
+            walletDao.updateWalletAmount(totalWalletAmount,spend.walletId)
+            getWallet(wallet.id)
         }
     }
 

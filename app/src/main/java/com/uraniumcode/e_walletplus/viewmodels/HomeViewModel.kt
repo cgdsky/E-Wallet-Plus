@@ -8,6 +8,7 @@ import com.uraniumcode.e_walletplus.model.Wallet
 import kotlinx.coroutines.launch
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import android.util.Log
 import com.uraniumcode.e_walletplus.R
 import com.uraniumcode.e_walletplus.utils.Constants
 
@@ -54,8 +55,12 @@ class HomeViewModel(application: Application) : BaseViewModel(application)  {
 
     fun deleteSpend(spendId: Long){
         launch {
+            val spend = spendDao.getSpend(spendId)
+            val wallet = walletDao.getWallet(spend.walletId)
             spendDeleteLiveData.value = spendDao.deleteSpend(spendId)
-
+            val totalWalletAmount = wallet.amount!! - spend.amount
+            walletDao.updateWalletAmount(totalWalletAmount,spend.walletId)
+            getAllWallets()
 
         }
     }
@@ -72,7 +77,7 @@ class HomeViewModel(application: Application) : BaseViewModel(application)  {
             {
                 val editor = prefs.edit()
                 editor.putBoolean(Constants().PREF_FIRST_TIME, false)
-                editor.apply();
+                editor.apply()
                 val walletName = getApplication<Application>().getString(R.string.moneyBox)
                 val walletAmount = 0.0
                 val dataTime = System.currentTimeMillis()
