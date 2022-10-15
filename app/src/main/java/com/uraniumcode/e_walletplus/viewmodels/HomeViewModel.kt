@@ -6,6 +6,11 @@ import com.uraniumcode.e_walletplus.database.AppDatabase
 import com.uraniumcode.e_walletplus.model.Spend
 import com.uraniumcode.e_walletplus.model.Wallet
 import kotlinx.coroutines.launch
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
+import com.uraniumcode.e_walletplus.R
+import com.uraniumcode.e_walletplus.utils.Constants
+
 
 class HomeViewModel(application: Application) : BaseViewModel(application)  {
 
@@ -15,12 +20,15 @@ class HomeViewModel(application: Application) : BaseViewModel(application)  {
     var spendsLiveData = MutableLiveData<List<Spend>>()
     var spendDeleteLiveData = MutableLiveData<Int>()
     var walletDeleteLiveData = MutableLiveData<Int>()
+    var prefs: SharedPreferences = application.getSharedPreferences(Constants().PREF_NAME, MODE_PRIVATE)
+    val walletDao = AppDatabase(getApplication()).walletDao()
+    val spendDao = AppDatabase(getApplication()).spendDao()
+
 
     fun getAllWallets() {
         launch {
 
-            val dao = AppDatabase(getApplication()).walletDao()
-            val wallets = dao.getAllWallets()
+            val wallets = walletDao.getAllWallets()
             walletsLiveData.value = wallets
 
         }
@@ -29,14 +37,12 @@ class HomeViewModel(application: Application) : BaseViewModel(application)  {
     fun getLastSpends() {
         launch {
 
-            val dao = AppDatabase(getApplication()).spendDao()
-            val walletdao = AppDatabase(getApplication()).walletDao()
 
-            val spends = dao.getLastSpends()
+            val spends = spendDao.getLastSpends()
             var i = 0
             val walletList: ArrayList<Wallet> = arrayListOf()
             while (i < spends.size) {
-                walletList.add(walletdao.getWallet(spends[i].walletId))
+                walletList.add(walletDao.getWallet(spends[i].walletId))
                 i++
             }
             spendsWalletLiveData.value = walletList
@@ -48,15 +54,32 @@ class HomeViewModel(application: Application) : BaseViewModel(application)  {
 
     fun deleteSpend(spendId: Long){
         launch {
-            val spendDao = AppDatabase(getApplication()).spendDao()
             spendDeleteLiveData.value = spendDao.deleteSpend(spendId)
+
+
         }
     }
 
     fun deleteWallet(walletId: Long){
         launch {
-            val walletDao = AppDatabase(getApplication()).walletDao()
             walletDeleteLiveData.value = walletDao.deleteWallet(walletId)
+        }
+    }
+
+    fun isFirstTime(){
+        launch {
+            if (prefs.getBoolean(Constants().PREF_FIRST_TIME, true))
+            {
+                val editor = prefs.edit()
+                editor.putBoolean(Constants().PREF_FIRST_TIME, false)
+                editor.apply();
+                val walletName = getApplication<Application>().getString(R.string.moneyBox)
+                val walletAmount = 0.0
+                val dataTime = System.currentTimeMillis()
+                val walletData = Wallet(walletName , dataTime, walletAmount)
+                walletDao.insertData(walletData)
+                getAllWallets()
+            }
         }
     }
 

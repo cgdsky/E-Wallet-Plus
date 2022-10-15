@@ -1,6 +1,5 @@
 package com.uraniumcode.e_walletplus.dao
 
-import android.icu.util.CurrencyAmount
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -12,7 +11,7 @@ interface WalletDao {
     @Insert
     suspend fun insertData(wallet: Wallet) : Long
 
-    @Query("Select * From Wallet")
+    @Query("Select * From Wallet order by `dateTime ` DESC")
     suspend fun getAllWallets() : List<Wallet>
 
     @Query("Update  Wallet set amount= :amount where id= :walletId")

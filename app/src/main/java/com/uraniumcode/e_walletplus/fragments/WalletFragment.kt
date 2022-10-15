@@ -65,6 +65,10 @@ class WalletFragment : Fragment(), DatabaseListener {
         tv_wallet_amount.text = wallet.amount.toString()
         (activity as MainActivity).changeToolbarTitle(wallet.name!!)
         (activity as MainActivity).openCloseButtons(true)
+
+        if(wallet.id == Constants().MONEY_BOX_ID){
+            btn_delete.visibility = View.GONE
+        }
     }
 
     private fun setSpinners(){

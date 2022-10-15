@@ -17,5 +17,6 @@
     <string name="spend_delete_dialog_title">Harcama Silinsin mi? </string>
     <string name="yes">Evet </string>
     <string name="no">Hayır </string>
+    <string name="moneyBox">Kumbara </string>
 
 </resources>

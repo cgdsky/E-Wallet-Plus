@@ -15,6 +15,7 @@ import com.uraniumcode.e_walletplus.R
 import com.uraniumcode.e_walletplus.adapters.SpendAdapter
 import com.uraniumcode.e_walletplus.adapters.WalletAdapter
 import com.uraniumcode.e_walletplus.listeners.DatabaseListener
+import com.uraniumcode.e_walletplus.model.Wallet
 import com.uraniumcode.e_walletplus.utils.Constants
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -23,13 +24,13 @@ class HomeFragment : Fragment(), DatabaseListener {
     private var databaseListener: DatabaseListener? = null
     private lateinit var walletAdapter: WalletAdapter
     private lateinit var spendAdapter: SpendAdapter
+    private lateinit var walletList: ArrayList<Wallet>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         databaseListener = this
         spendAdapter = SpendAdapter(databaseListener, arrayListOf(), arrayListOf())
-        walletAdapter = WalletAdapter(databaseListener, arrayListOf())
     }
 
     override fun onCreateView(
@@ -61,6 +62,7 @@ class HomeFragment : Fragment(), DatabaseListener {
             LinearLayoutManager.VERTICAL,
             false
         )
+        walletAdapter = WalletAdapter(databaseListener, arrayListOf(),recycler_Wallet)
 
         recycler_Wallet.adapter = walletAdapter
         recycler_last_spends.adapter = spendAdapter
@@ -86,6 +88,7 @@ class HomeFragment : Fragment(), DatabaseListener {
         viewModel.walletsLiveData.observe(viewLifecycleOwner, { wallets ->
 
             wallets?.let {
+                walletList = wallets as ArrayList<Wallet>
                 walletAdapter.updateWalletList(wallets)
             }
 
@@ -125,6 +128,7 @@ class HomeFragment : Fragment(), DatabaseListener {
 
     private fun getAllData(){
         viewModel.getAllWallets()
+        viewModel.isFirstTime()
         viewModel.getLastSpends()
     }
 
