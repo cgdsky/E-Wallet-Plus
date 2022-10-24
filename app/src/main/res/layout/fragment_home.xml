@@ -6,7 +6,7 @@
     tools:context=".fragments.HomeFragment">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_100sdp"
+        android:layout_height="@dimen/_130sdp"
         android:background="@drawable/round_bottom_corner"
         android:backgroundTint="@color/appColor">
 
@@ -14,7 +14,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_Wallet"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_130sdp"
+        android:layout_height="@dimen/_160sdp"
         android:layout_marginLeft="@dimen/_10sdp"
         android:layout_marginRight="@dimen/_10sdp"
         />

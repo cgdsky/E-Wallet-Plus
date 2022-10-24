@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main_rel"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_130sdp"
+    android:layout_height="@dimen/_160sdp"
     xmlns:tools="http://schemas.android.com/tools">
     <ImageView
         android:id="@+id/img_right_arrow"
@@ -25,7 +25,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_125sdp"
+        android:layout_height="@dimen/_155sdp"
         android:layout_marginLeft="@dimen/_15sdp"
         android:layout_marginRight="@dimen/_15sdp"
         android:background="@drawable/round_all_corner"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_15sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_10sdp"
             android:background="@drawable/ic_delete" />
@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:text="@string/current_balance"
             android:textColor="@color/gray"
             android:textSize="@dimen/_15sdp" />
@@ -68,6 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_wallet_amount"
+            android:layout_marginTop="@dimen/_5sdp"
             android:layout_centerHorizontal="true">
 
             <TextView
@@ -93,7 +94,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/_5sdp">
+            android:layout_marginBottom="@dimen/_15sdp">
 
             <Button
                 android:id="@+id/btn_wallet_add_money"
