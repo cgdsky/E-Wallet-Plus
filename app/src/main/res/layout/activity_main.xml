@@ -49,6 +49,16 @@
                 android:background="@drawable/ic_add_wallet"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/img_touch"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_3sdp"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/ic_touch"
+                android:visibility="visible" />
         </RelativeLayout>
 
     </androidx.appcompat.widget.Toolbar>
