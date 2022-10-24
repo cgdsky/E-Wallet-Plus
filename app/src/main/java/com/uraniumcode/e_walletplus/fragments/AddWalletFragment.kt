@@ -39,19 +39,20 @@ class AddWalletFragment() : BottomSheetDialogFragment() {
         observeLiveData()
     }
 
-    fun listeners(){
+    private fun listeners(){
         btn_add_wallet.setOnClickListener {
-            val walletName = et_wallet_name.text.toString()
-            val walletAmount = et_wallet_amount.text.toString().toDouble()
-            val dataTime = System.currentTimeMillis()
-            val walletData = Wallet(walletName , dataTime, walletAmount)
-            viewModel.addWallet(walletData)
-
+            if(et_wallet_name.text.toString().trim() != ""  && et_wallet_amount.text.toString().trim() != "" && et_wallet_amount.text.toString().trim() !=  "." ) {
+                    val walletName = et_wallet_name.text.toString()
+                    val walletAmount = et_wallet_amount.text.toString().toDouble()
+                    val dataTime = System.currentTimeMillis()
+                    val walletData = Wallet(walletName, dataTime, walletAmount)
+                    viewModel.addWallet(walletData)
+            }
 
         }
     }
 
-    fun observeLiveData(){
+    private fun observeLiveData(){
         viewModel.insertedWalletId.observe(viewLifecycleOwner, { insertWalletId->
             insertWalletId?.let {
                 findNavController().previousBackStackEntry?.savedStateHandle?.set(Constants().ADDED_WALLET, insertWalletId)

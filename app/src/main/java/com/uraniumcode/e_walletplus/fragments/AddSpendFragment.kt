@@ -14,6 +14,8 @@ import com.uraniumcode.e_walletplus.model.Spend
 import com.uraniumcode.e_walletplus.utils.Constants
 import com.uraniumcode.e_walletplus.viewmodels.AddSpendViewModel
 import kotlinx.android.synthetic.main.fragment_add_spend.*
+import kotlinx.android.synthetic.main.fragment_add_spend.tv_title
+import kotlinx.android.synthetic.main.fragment_add_wallet.*
 
 
 class AddSpendFragment : BottomSheetDialogFragment() {
@@ -56,12 +58,14 @@ class AddSpendFragment : BottomSheetDialogFragment() {
     }
     private fun listeners(){
         btn_add_spend.setOnClickListener {
-            val spendTitle = et_spend_title.text.toString()
-            val spendAmount = if(isSpend) et_spend_amount.text.toString().toDouble() * -1 else et_spend_amount.text.toString().toDouble()
-            val dataTime = System.currentTimeMillis()
-            val spendData = Spend(spendTitle, dataTime, spendAmount, walletId)
-
-            viewModel.addSpend(spendData)
+            if(et_spend_title.text.toString().trim() != "" && et_spend_amount.text.toString().trim() !=  "" && et_spend_amount.text.toString().trim() !=  "." ) {
+                    val spendTitle = et_spend_title.text.toString()
+                    val spendAmount = if (isSpend) et_spend_amount.text.toString()
+                        .toDouble() * -1 else et_spend_amount.text.toString().toDouble()
+                    val dataTime = System.currentTimeMillis()
+                    val spendData = Spend(spendTitle, dataTime, spendAmount, walletId)
+                    viewModel.addSpend(spendData)
+            }
         }
     }
 
