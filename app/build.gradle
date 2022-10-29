@@ -67,4 +67,7 @@ dependencies {
     //dimens
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
 
+    //onesignal
+    implementation 'com.onesignal:OneSignal:[4.0.0, 4.99.99]'
+
 }

@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import androidx.navigation.Navigation
+import com.onesignal.OneSignal
 import com.uraniumcode.e_walletplus.fragments.HomeFragmentDirections
 import com.uraniumcode.e_walletplus.utils.Constants
 import kotlinx.android.synthetic.main.activity_main.*
@@ -16,6 +17,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        OneSignal.initWithContext(this)
+        OneSignal.setAppId(Constants().ONE_SIGNAL_APP_ID)
         listeners()
         controlWalletTouchAnimate()
     }
