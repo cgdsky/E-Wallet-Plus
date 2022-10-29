@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import androidx.navigation.Navigation
+import com.google.android.gms.ads.MobileAds
 import com.onesignal.OneSignal
 import com.uraniumcode.e_walletplus.fragments.HomeFragmentDirections
 import com.uraniumcode.e_walletplus.utils.Constants
@@ -19,6 +20,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         OneSignal.initWithContext(this)
         OneSignal.setAppId(Constants().ONE_SIGNAL_APP_ID)
+        MobileAds.initialize(this){}
         listeners()
         controlWalletTouchAnimate()
     }

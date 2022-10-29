@@ -2,9 +2,12 @@ package com.uraniumcode.e_walletplus.fragments
 
 import android.os.Bundle
 import android.view.*
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.uraniumcode.e_walletplus.R
 import com.uraniumcode.e_walletplus.model.Wallet
@@ -15,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_add_wallet.*
 class AddWalletFragment() : BottomSheetDialogFragment() {
 
     private lateinit var viewModel : AddWalletViewModel
+    private var mInterstitialAd: InterstitialAd? = null
 
 
 
@@ -22,6 +26,19 @@ class AddWalletFragment() : BottomSheetDialogFragment() {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.BottomSheetTransparentTheme)
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+        var adRequest = AdRequest.Builder().build()
+        InterstitialAd.load(context!!,Constants().ADMOB_UNIT_ID, adRequest, object : InterstitialAdLoadCallback() {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+                super.onAdFailedToLoad(adError)
+            }
+
+            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                super.onAdLoaded(interstitialAd)
+                mInterstitialAd = interstitialAd
+
+            }
+        })
+
 
     }
 
@@ -47,6 +64,9 @@ class AddWalletFragment() : BottomSheetDialogFragment() {
                     val dataTime = System.currentTimeMillis()
                     val walletData = Wallet(walletName, dataTime, walletAmount)
                     viewModel.addWallet(walletData)
+                if (mInterstitialAd != null) {
+                    mInterstitialAd?.show(requireActivity())
+                }
             }
 
         }
