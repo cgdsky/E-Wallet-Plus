@@ -3,10 +3,14 @@ package com.uraniumcode.e_walletplus
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
 import com.google.android.gms.ads.MobileAds
 import com.onesignal.OneSignal
@@ -23,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         MobileAds.initialize(this){}
         listeners()
         controlWalletTouchAnimate()
+        checkAndRequestNotificationPermission()
     }
 
     private fun listeners(){
@@ -67,6 +72,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun checkAndRequestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
 
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { }
 
 }
