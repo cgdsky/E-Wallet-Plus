@@ -10,24 +10,26 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.uraniumcode.e_walletplus.R
+import com.uraniumcode.e_walletplus.databinding.FragmentAddWalletBinding
 import com.uraniumcode.e_walletplus.model.Wallet
 import com.uraniumcode.e_walletplus.utils.Constants
 import com.uraniumcode.e_walletplus.viewmodels.AddWalletViewModel
-import kotlinx.android.synthetic.main.fragment_add_wallet.*
 
-class AddWalletFragment() : BottomSheetDialogFragment() {
+class AddWalletFragment : BottomSheetDialogFragment() {
 
-    private lateinit var viewModel : AddWalletViewModel
+    private var _binding: FragmentAddWalletBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var viewModel: AddWalletViewModel
     private var mInterstitialAd: InterstitialAd? = null
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.BottomSheetTransparentTheme)
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-        var adRequest = AdRequest.Builder().build()
-        InterstitialAd.load(context!!,Constants().ADMOB_UNIT_ID, adRequest, object : InterstitialAdLoadCallback() {
+
+        val adRequest = AdRequest.Builder().build()
+        InterstitialAd.load(requireContext(), Constants().ADMOB_UNIT_ID, adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 super.onAdFailedToLoad(adError)
             }
@@ -35,50 +37,53 @@ class AddWalletFragment() : BottomSheetDialogFragment() {
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
                 super.onAdLoaded(interstitialAd)
                 mInterstitialAd = interstitialAd
-
             }
         })
-
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_add_wallet, container, false)
+    ): View {
+        _binding = FragmentAddWalletBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(AddWalletViewModel::class.java)
+        viewModel = ViewModelProvider(this)[AddWalletViewModel::class.java]
         listeners()
         observeLiveData()
     }
 
-    private fun listeners(){
-        btn_add_wallet.setOnClickListener {
-            if(et_wallet_name.text.toString().trim() != ""  && et_wallet_amount.text.toString().trim() != "" && et_wallet_amount.text.toString().trim() !=  "." ) {
-                    val walletName = et_wallet_name.text.toString()
-                    val walletAmount = et_wallet_amount.text.toString().toDouble()
-                    val dataTime = System.currentTimeMillis()
-                    val walletData = Wallet(walletName, dataTime, walletAmount)
-                    viewModel.addWallet(walletData)
-                if (mInterstitialAd != null) {
-                    mInterstitialAd?.show(requireActivity())
-                }
-            }
+    private fun listeners() {
+        binding.btnAddWallet.setOnClickListener {
+            val walletName = binding.etWalletName.text.toString().trim()
+            val walletAmountText = binding.etWalletAmount.text.toString().trim()
 
+            if (walletName.isNotEmpty() && walletAmountText.isNotEmpty() && walletAmountText != ".") {
+                val walletAmount = walletAmountText.toDouble()
+                val dateTime = System.currentTimeMillis()
+                val walletData = Wallet(walletName, dateTime, walletAmount)
+                viewModel.addWallet(walletData)
+
+                mInterstitialAd?.show(requireActivity())
+            }
         }
     }
 
-    private fun observeLiveData(){
-        viewModel.insertedWalletId.observe(viewLifecycleOwner, { insertWalletId->
-            insertWalletId?.let {
-                findNavController().previousBackStackEntry?.savedStateHandle?.set(Constants().ADDED_WALLET, insertWalletId)
+    private fun observeLiveData() {
+        viewModel.insertedWalletId.observe(viewLifecycleOwner) { insertedWalletId ->
+            insertedWalletId?.let {
+                findNavController().previousBackStackEntry?.savedStateHandle
+                    ?.set(Constants().ADDED_WALLET, insertedWalletId)
                 dismiss()
             }
-        })
+        }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

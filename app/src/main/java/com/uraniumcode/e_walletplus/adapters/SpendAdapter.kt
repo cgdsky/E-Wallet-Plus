@@ -2,52 +2,61 @@ package com.uraniumcode.e_walletplus.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.uraniumcode.e_walletplus.R
+import com.uraniumcode.e_walletplus.databinding.ItemSpendBinding
 import com.uraniumcode.e_walletplus.listeners.DatabaseListener
 import com.uraniumcode.e_walletplus.model.Spend
 import com.uraniumcode.e_walletplus.model.Wallet
-import com.uraniumcode.e_walletplus.utils.*
-import kotlinx.android.synthetic.main.item_spend.view.*
+import com.uraniumcode.e_walletplus.utils.AlertDialogHelper
+import com.uraniumcode.e_walletplus.utils.dateTime
 
-class SpendAdapter(private val databaseListener: DatabaseListener?, private val spendList: ArrayList<Spend>, private val walletList: ArrayList<Wallet>): RecyclerView.Adapter<SpendAdapter.SpendViewHolder>()  {
+class SpendAdapter(
+    private val databaseListener: DatabaseListener?,
+    private val spendList: ArrayList<Spend>,
+    private val walletList: ArrayList<Wallet>
+) : RecyclerView.Adapter<SpendAdapter.SpendViewHolder>() {
 
-    class SpendViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
+    class SpendViewHolder(val binding: ItemSpendBinding) : RecyclerView.ViewHolder(binding.root)
 
-    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpendViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.item_spend, parent, false)
-
-        return SpendViewHolder(view)
+        val binding = ItemSpendBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return SpendViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: SpendViewHolder, position: Int) {
-        if(spendList[position].amount < 0){
-            holder.view.img_spend.setBackgroundResource(R.drawable.ic_remove)
-            holder.view.tv_money.setTextColor(ContextCompat.getColor(holder.view.context, R.color.red))
-        }else{
-            holder.view.img_spend.setBackgroundResource(R.drawable.ic_plus)
-            holder.view.tv_money.setTextColor(ContextCompat.getColor(holder.view.context, R.color.green))
+        val spend = spendList[position]
+        val binding = holder.binding
 
+        if (spend.amount < 0) {
+            binding.imgSpend.setBackgroundResource(R.drawable.ic_remove)
+            binding.tvMoney.setTextColor(ContextCompat.getColor(binding.root.context, R.color.red))
+        } else {
+            binding.imgSpend.setBackgroundResource(R.drawable.ic_plus)
+            binding.tvMoney.setTextColor(ContextCompat.getColor(binding.root.context, R.color.green))
         }
-        holder.view.tv_title_spend.text = spendList[position].title
-        holder.view.tv_money.text = spendList[position].amount.toString()
-        if(walletList.size > 0){
-            holder.view.tv_wallet_name.text = walletList.get(position).name
+
+        binding.tvTitleSpend.text = spend.title
+        binding.tvMoney.text = spend.amount.toString()
+
+        if (walletList.size > position) {
+            binding.tvWalletName.text = walletList[position].name
+        } else {
+            binding.tvWalletName.text = ""
         }
-        holder.view.tv_date.text = spendList[position].dateTime.dateTime()
-        holder.view.btn_delete.setOnClickListener {
-            AlertDialogHelper().showDeleteDialog(holder.view.context,databaseListener!!,spendList[position].id,true)
+
+        binding.tvDate.text = spend.dateTime.dateTime()
+
+        binding.btnDelete.setOnClickListener {
+            databaseListener?.let {
+                AlertDialogHelper().showDeleteDialog(binding.root.context, it, spend.id, true)
+            }
         }
     }
 
-    override fun getItemCount(): Int {
-        return spendList.size
-    }
+    override fun getItemCount(): Int = spendList.size
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateSpendList(newSpendList: List<Spend>, newWalletList: List<Wallet>) {
