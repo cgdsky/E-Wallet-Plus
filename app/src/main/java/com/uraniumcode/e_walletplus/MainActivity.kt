@@ -3,6 +3,7 @@ package com.uraniumcode.e_walletplus
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,6 +17,7 @@ import com.onesignal.OneSignal
 import com.uraniumcode.e_walletplus.databinding.ActivityMainBinding
 import com.uraniumcode.e_walletplus.fragments.HomeFragmentDirections
 import com.uraniumcode.e_walletplus.utils.Constants
+import com.uraniumcode.e_walletplus.utils.InsetsUtils
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,7 +27,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        InsetsUtils.applyWindowInsetsPadding(binding.root)
+        applyStatusBarAppearance()
         OneSignal.initWithContext(this)
         OneSignal.setAppId(Constants().ONE_SIGNAL_APP_ID)
         MobileAds.initialize(this) {}
@@ -93,4 +96,17 @@ class MainActivity : AppCompatActivity() {
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { }
+
+    private fun applyStatusBarAppearance() {
+        val isDarkTheme = resources.configuration.uiMode and
+                Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+
+        if (!isDarkTheme && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        } else {
+            window.decorView.systemUiVisibility = 0
+        }
+
+        window.statusBarColor = ContextCompat.getColor(this, R.color.appColor)
+    }
 }
